@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Dimensions, ScaledSize } from 'react-native';
+import { Dimensions, EmitterSubscription, ScaledSize } from 'react-native';
 import hoistNonReactStatic from 'hoist-non-react-statics';
 
 type DimensionsType = {
@@ -20,6 +20,8 @@ export default function withDimensions<Props extends InjectedProps>(
 ): React.ComponentType<Pick<Props, Exclude<keyof Props, keyof InjectedProps>>> {
   class EnhancedComponent extends React.Component {
     static displayName = `withDimensions(${WrappedComponent.displayName})`;
+    // eslint-disable-next-line react/sort-comp
+    private changeSubscription: EmitterSubscription | undefined = undefined;
 
     constructor(props: Props) {
       super(props);
@@ -32,11 +34,14 @@ export default function withDimensions<Props extends InjectedProps>(
     }
 
     componentDidMount() {
-      Dimensions.addEventListener('change', this.handleOrientationChange);
+      this.changeSubscription = Dimensions.addEventListener(
+        'change',
+        this.handleOrientationChange
+      );
     }
 
     componentWillUnmount() {
-      Dimensions.removeEventListener('change', this.handleOrientationChange);
+      this.changeSubscription?.remove();
     }
 
     handleOrientationChange = ({ window }: { window: ScaledSize }) => {

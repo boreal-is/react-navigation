@@ -14,7 +14,10 @@ export default function (WrappedComponent) {
     }
 
     componentDidMount() {
-      this.changeSubscription = Dimensions.addEventListener('change', this.handleOrientationChange);
+      this.changeSubscription = Dimensions.addEventListener(
+        'change',
+        this.handleOrientationChange
+      );
     }
 
     componentWillUnmount() {
