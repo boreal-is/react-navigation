@@ -37,7 +37,7 @@ export default function withDimensions<Props extends InjectedProps>(
       this.changeSubscription = Dimensions.addEventListener(
         'change',
         this.handleOrientationChange
-      );
+      ) as any;
     }
 
     componentWillUnmount() {

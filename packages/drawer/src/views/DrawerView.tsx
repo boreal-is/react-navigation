@@ -101,7 +101,7 @@ export default class DrawerView extends React.PureComponent<Props, State> {
     this.changeSubscription = Dimensions.addEventListener(
       'change',
       this.updateWidth
-    );
+    ) as any;
   }
 
   componentDidUpdate(prevProps: Props) {
